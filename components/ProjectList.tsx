@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Project } from '@/types/project';
 import { BookOpenText, Flag } from 'lucide-react';
+import { urlForImage } from '@/lib/sanity.image';
 
 interface ProjectListProps {
   projects: Project[];
@@ -16,18 +17,21 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, className }) => {
   const [hoverPosition, setHoverPosition] = useState<{ top: number, left: number } | null>(null);
   const projectItemRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter = (e: React.MouseEvent, imageUrl: string) => {
-    setActiveImage(imageUrl);
-    
-    if (projectItemRef.current) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const containerRect = projectItemRef.current.getBoundingClientRect();
+  const handleMouseEnter = (e: React.MouseEvent, project: Project) => {
+    const imageUrl = urlForImage(project.mainImage)?.url();
+    if (imageUrl) {
+      setActiveImage(imageUrl);
       
-      // Calculate position relative to the container
-      setHoverPosition({
-        top: rect.bottom - containerRect.top + 20,
-        left: Math.max(0, rect.left - containerRect.left),
-      });
+      if (projectItemRef.current) {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const containerRect = projectItemRef.current.getBoundingClientRect();
+        
+        // Calculate position relative to the container
+        setHoverPosition({
+          top: rect.bottom - containerRect.top + 20,
+          left: Math.max(0, rect.left - containerRect.left),
+        });
+      }
     }
   };
 
@@ -52,7 +56,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, className }) => {
     >
       <div className="flex flex-wrap text-2xl leading-relaxed">
         {projects.map((project, index) => (
-          <React.Fragment key={project.id}>
+          <React.Fragment key={project._id}>
             <div 
               className="project-item cursor-pointer py-1 group transform transition-all duration-300 ease-in-out inline-flex items-center hover:opacity-80"
               style={{ 
@@ -61,7 +65,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects, className }) => {
                 animation: 'project-item-appear 0.5s forwards',
                 animationDelay: `${index * 30}ms`
               }}
-              onMouseEnter={(e) => handleMouseEnter(e, project.imageUrl)}
+              onMouseEnter={(e) => handleMouseEnter(e, project)}
               onMouseLeave={handleMouseLeave}
             >
               {getProjectIcon(project.type)}
