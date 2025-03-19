@@ -1,16 +1,17 @@
 import ProjectList from '@/components/ProjectList';
+import { Project } from '@/types/project';
 
-const projects = [
+const projects: Project[] = [
   {
     id: '1',
     title: 'SIGNALS Website',
-    type: 'book',
+    type: 'book' as const,
     imageUrl: '/images/project1.jpg'
   },
   {
     id: '2',
     title: 'Brand Identity',
-    type: 'signage',
+    type: 'signage' as const,
     imageUrl: '/images/project2.jpg'
   }
 ];
