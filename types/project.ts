@@ -3,4 +3,5 @@ export interface Project {
   title: string;
   type: 'book' | 'signage';
   imageUrl: string;
+  link?: string;
 } 
