@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [], // Add your image domains here
+    domains: ['placehold.co'],
     unoptimized: true // This allows static exports to work with images
   },
 }
